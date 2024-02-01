@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/reyoung/gt/common"
 	"github.com/reyoung/gt/proto"
+	"io"
+	"log"
 	"os/exec"
+	"strings"
 )
 
 func postHeaderError(server proto.GT_GTServer, err error) error {
@@ -47,6 +50,8 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) erro
 
 	cmds := append([]string{"bash", "-c"}, execReq.Commands...)
 
+	log.Printf("exec command: %s\n", strings.Join(cmds, " "))
+
 	cmd := exec.Command(cmds[0], cmds[1:]...)
 	ds := newServerDataStream(server)
 	rwc := common.DataStreamToReadWriteCloser(ds)
@@ -55,6 +60,16 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) erro
 	}()
 	cmd.Stdout = rwc
 	cmd.Stderr = rwc
+	stdinPipe, err := cmd.StdinPipe()
+	if err != nil {
+		return postExecResponse(server, fmt.Errorf("get stdin pipe failed: %w", err))
+	}
+	defer func() {
+		stdinPipe.Close()
+	}()
+	go func() {
+		_, _ = io.Copy(stdinPipe, rwc)
+	}()
 	//cmd.Stdin = rwc
 
 	if err := cmd.Start(); err != nil {
