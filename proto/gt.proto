@@ -1,0 +1,42 @@
+syntax = "proto3";
+option go_package = "github.com/reyoung/gt/proto";
+package proto;
+
+message Data {
+  bytes data = 1;
+  bool close = 2;
+}
+
+message Request {
+  message Head {
+    message Stfp {}
+    oneof head {
+      Stfp stfp = 1;
+    }
+  }
+
+  oneof req {
+    Head head = 1;
+    Data data = 2;
+  }
+}
+
+message Response {
+  message Head {
+    message Error {
+      string message = 1;
+    }
+    oneof head {
+      Error error = 1;
+    }
+  }
+
+  oneof rsp {
+    Head head = 1;
+    Data data = 2;
+  }
+}
+
+service GT {
+  rpc GT(stream Request) returns (stream Response) {}
+}
