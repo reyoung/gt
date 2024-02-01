@@ -20,9 +20,15 @@ message Request {
       string term = 1;
       ResizeWindow resize_window = 2;
     }
+    message Exec {
+      repeated string commands = 1;
+    }
+
+
     oneof head {
       Stfp stfp = 1;
       Pty pty = 2;
+      Exec exec = 3;
     }
   }
 
@@ -44,9 +50,15 @@ message Response {
     }
   }
 
+  message ExecDone {
+    string error = 1;
+    uint32 exit_code = 2;
+  }
+
   oneof rsp {
     Head head = 1;
     Data data = 2;
+    ExecDone exec_done = 3;
   }
 }
 

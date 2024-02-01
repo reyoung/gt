@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"github.com/gliderlabs/ssh"
 	"github.com/reyoung/gt/client"
@@ -27,8 +28,20 @@ func main() {
 			pty, winCh, isPty := session.Pty()
 
 			if !isPty {
-				session.Write([]byte("not a pty"))
-				session.Exit(1)
+				err := client.Exec(cli, session)
+
+				if err != nil {
+					session.Write([]byte(err.Error()))
+					var errExecExit *client.ErrExecExit
+					if ok := errors.As(err, &errExecExit); ok {
+						session.Exit(errExecExit.Code())
+					} else {
+						session.Exit(-1)
+					}
+				} else {
+					session.Exit(0)
+				}
+
 				return
 			}
 

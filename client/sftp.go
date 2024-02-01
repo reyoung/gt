@@ -31,7 +31,7 @@ func SFtp(client proto.GTClient, s ssh.Session) error {
 		return fmt.Errorf("head error: %s", err.Message)
 	}
 
-	rwc := common.DataStreamToReadWriteCloser(&clientDataStream{client: stream})
+	rwc := common.DataStreamToReadWriteCloser(newDataStream(stream))
 
 	go func() {
 		_, _ = io.Copy(rwc, s)

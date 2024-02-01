@@ -53,7 +53,7 @@ func Pty(client proto.GTClient, ptyReq ssh.Pty, winCh <-chan ssh.Window, s ssh.S
 		}
 	}()
 
-	dataStream := &clientDataStream{client: cli}
+	dataStream := newDataStream(cli)
 	rwc := common.DataStreamToReadWriteCloser(dataStream)
 
 	go func() {

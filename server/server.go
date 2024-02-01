@@ -24,6 +24,9 @@ func (s *Server) GT(gtServer proto.GT_GTServer) error {
 
 	case *proto.Request_Head_Pty_:
 		return ptyServer(v.Pty, gtServer)
+
+	case *proto.Request_Head_Exec_:
+		return execServer(v.Exec, gtServer)
 	}
 
 	return fmt.Errorf("unknown head type: %T", head.Head)
