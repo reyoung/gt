@@ -9,6 +9,7 @@ import (
 	"github.com/reyoung/gt/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"log"
 )
 
 func main() {
@@ -28,7 +29,9 @@ func main() {
 			pty, winCh, isPty := session.Pty()
 
 			if !isPty {
+				log.Printf("no pty allocated, %s", session.RawCommand())
 				err := client.Exec(cli, session)
+				log.Printf("no pty allocated, exec done, %s %v", session.RawCommand(), err)
 
 				if err != nil {
 					session.Write([]byte(err.Error()))

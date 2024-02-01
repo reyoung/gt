@@ -6,7 +6,6 @@ import (
 	"github.com/reyoung/gt/common"
 	"github.com/reyoung/gt/proto"
 	"io"
-	"log"
 )
 
 type ErrExecExit struct {
@@ -40,9 +39,6 @@ func Exec(cli proto.GTClient, session ssh.Session) error {
 		}}}}})
 	if err != nil {
 		return fmt.Errorf("send head frame failed: %w", err)
-	}
-	for _, env := range session.Environ() {
-		log.Printf("env: %s", env)
 	}
 	//session
 

@@ -10,6 +10,8 @@ import (
 )
 
 func Pty(client proto.GTClient, ptyReq ssh.Pty, winCh <-chan ssh.Window, s ssh.Session) error {
+	log.Printf("pty allocated, %s", s.RawCommand())
+
 	cli, err := client.GT(s.Context())
 	if err != nil {
 		return fmt.Errorf("call GT failed: %w", err)
