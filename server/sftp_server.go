@@ -12,7 +12,7 @@ func sftpServer(server proto.GT_GTServer) error {
 	if err != nil {
 		return fmt.Errorf("send head frame failed: %w", err)
 	}
-	rwc := common.DataStreamToReadWriteCloser(&serverDataStream{server: server})
+	rwc := common.DataStreamToReadWriteCloser(newServerDataStream(server))
 
 	svr, err := sftp.NewServer(rwc)
 	if err != nil {

@@ -18,9 +18,12 @@ func (s *Server) GT(gtServer proto.GT_GTServer) error {
 	if head == nil {
 		return fmt.Errorf("head is nil, first frame should be head")
 	}
-	switch head.Head.(type) {
+	switch v := head.Head.(type) {
 	case *proto.Request_Head_Stfp_:
 		return sftpServer(gtServer)
+
+	case *proto.Request_Head_Pty_:
+		return ptyServer(v.Pty, gtServer)
 	}
 
 	return fmt.Errorf("unknown head type: %T", head.Head)

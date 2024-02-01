@@ -22,6 +22,25 @@ func main() {
 
 	svr := &ssh.Server{
 		Addr: *svrAddr,
+
+		Handler: func(session ssh.Session) {
+			pty, winCh, isPty := session.Pty()
+
+			if !isPty {
+				session.Write([]byte("not a pty"))
+				session.Exit(1)
+				return
+			}
+
+			err := client.Pty(cli, pty, winCh, session)
+			if err != nil {
+				session.Write([]byte(err.Error()))
+				session.Exit(1)
+				return
+			}
+			session.Exit(0)
+		},
+
 		SubsystemHandlers: map[string]ssh.SubsystemHandler{
 			"sftp": func(s ssh.Session) {
 				err := client.SFtp(cli, s)

@@ -3,6 +3,7 @@ module github.com/reyoung/gt
 go 1.21
 
 require (
+	github.com/creack/pty v1.1.21
 	github.com/gliderlabs/ssh v0.3.6
 	github.com/pkg/sftp v1.13.6
 	google.golang.org/grpc v1.61.0
