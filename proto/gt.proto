@@ -25,11 +25,15 @@ message Request {
       repeated string envs = 2;
     }
 
+    message Dial {
+      string addr = 1;
+    }
 
     oneof head {
       Stfp stfp = 1;
       Pty pty = 2;
       Exec exec = 3;
+      Dial dial = 4;
     }
   }
 

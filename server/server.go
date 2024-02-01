@@ -27,6 +27,9 @@ func (s *Server) GT(gtServer proto.GT_GTServer) error {
 
 	case *proto.Request_Head_Exec_:
 		return execServer(v.Exec, gtServer)
+
+	case *proto.Request_Head_Dial_:
+		return dialServer(v.Dial, gtServer)
 	}
 
 	return fmt.Errorf("unknown head type: %T", head.Head)

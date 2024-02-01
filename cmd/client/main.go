@@ -1,6 +1,7 @@
 package main
 
 import (
+	context "context"
 	"errors"
 	"flag"
 	"github.com/gliderlabs/ssh"
@@ -9,6 +10,7 @@ import (
 	"github.com/reyoung/gt/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"io"
 	"log"
 )
 
@@ -21,8 +23,6 @@ func main() {
 	defer conn.Close()
 
 	cli := proto.NewGTClient(conn)
-
-	forwardHandler := &ssh.ForwardedTCPHandler{}
 
 	svr := &ssh.Server{
 		Addr: *svrAddr,
@@ -65,10 +65,6 @@ func main() {
 			log.Printf("reverse port forwarding: %s:%d", bindHost, bindPort)
 			return true
 		},
-		RequestHandlers: map[string]ssh.RequestHandler{
-			"tcpip-forward":        forwardHandler.HandleSSHRequest,
-			"cancel-tcpip-forward": forwardHandler.HandleSSHRequest,
-		},
 		ChannelHandlers: map[string]ssh.ChannelHandler{
 			"direct-tcpip": ssh.DirectTCPIPHandler,
 		},
@@ -82,6 +78,12 @@ func main() {
 				}
 				s.Exit(0)
 			},
+		},
+		LocalPortForwardingDialer: func(ctx context.Context, network, address string) (io.ReadWriteCloser, error) {
+			if network != "tcp" {
+				return nil, errors.New("only tcp network supported")
+			}
+			return client.DialTCP(cli)(ctx, address)
 		},
 	}
 	svr.ListenAndServe()

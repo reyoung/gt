@@ -20,3 +20,5 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
 )
+
+replace github.com/gliderlabs/ssh v0.3.6 => github.com/reyoung/ssh v0.0.0-20240201130531-b0fb48ae6f53
