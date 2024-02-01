@@ -8,16 +8,29 @@ message Data {
 }
 
 message Request {
+  message ResizeWindow {
+    uint32 rows = 1;
+    uint32 cols = 2;
+  }
+
+
   message Head {
     message Stfp {}
+    message Pty {
+      string term = 1;
+      ResizeWindow resize_window = 2;
+    }
     oneof head {
       Stfp stfp = 1;
+      Pty pty = 2;
     }
   }
+
 
   oneof req {
     Head head = 1;
     Data data = 2;
+    ResizeWindow resize_window = 3;
   }
 }
 
