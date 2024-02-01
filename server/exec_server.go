@@ -42,15 +42,16 @@ func postExecResponse(server proto.GT_GTServer, err error) error {
 }
 
 func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err error) {
-	if len(execReq.Command) == 0 {
-		return postHeaderError(server, fmt.Errorf("no command to execute, and no tty allocated"))
-	}
+
 	if err := postHeaderError(server, nil); err != nil {
 		return fmt.Errorf("post header error: %w", err)
 	}
 
 	// see https://github.com/openssh/openssh-portable/blob/master/session.c#L1709
 	cmds := []string{"bash", "-c", execReq.Command}
+	if execReq.Command == "" {
+		cmds = []string{"bash", "-"}
+	}
 
 	log.Printf("exec command: %s\n", strings.Join(cmds, " "))
 	defer func() {
