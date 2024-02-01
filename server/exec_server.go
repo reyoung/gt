@@ -7,6 +7,7 @@ import (
 	"github.com/reyoung/gt/proto"
 	"io"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -41,14 +42,15 @@ func postExecResponse(server proto.GT_GTServer, err error) error {
 }
 
 func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err error) {
-	if len(execReq.Commands) == 0 {
-		return postHeaderError(server, fmt.Errorf("no command to execute"))
+	if len(execReq.Command) == 0 {
+		return postHeaderError(server, fmt.Errorf("no command to execute, and no tty allocated"))
 	}
 	if err := postHeaderError(server, nil); err != nil {
 		return fmt.Errorf("post header error: %w", err)
 	}
 
-	cmds := append([]string{"bash", "-c"}, execReq.Commands...)
+	// see https://github.com/openssh/openssh-portable/blob/master/session.c#L1709
+	cmds := []string{"bash", "-c", execReq.Command}
 
 	log.Printf("exec command: %s\n", strings.Join(cmds, " "))
 	defer func() {
@@ -56,6 +58,15 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err
 	}()
 
 	cmd := exec.Command(cmds[0], cmds[1:]...)
+	cmd.Env = execReq.Envs
+	for _, envKey := range []string{"PATH", "HOME", "SHELL", "USER", "TZ", "DISPLAY"} {
+		envVal, ok := os.LookupEnv(envKey)
+		if ok {
+			cmd.Env = append(cmd.Env, fmt.Sprintf("%s=%s", envKey, envVal))
+		}
+	}
+	cmd.Env = append(cmd.Env, "SSH_ORIGINAL_COMMAND="+execReq.Command)
+
 	ds := newServerDataStream(server)
 	rwc := common.DataStreamToReadWriteCloser(ds)
 	defer func() {

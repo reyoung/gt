@@ -13,6 +13,7 @@ type clientDataStream struct {
 }
 
 func (c *clientDataStream) Send(data *proto.Data) error {
+	//log.Printf("send data frame: %s", data.String())
 	return c.client.Send(&proto.Request{Req: &proto.Request_Data{Data: data}})
 }
 

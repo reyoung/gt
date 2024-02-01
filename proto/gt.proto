@@ -21,7 +21,8 @@ message Request {
       ResizeWindow resize_window = 2;
     }
     message Exec {
-      repeated string commands = 1;
+      string command = 1;
+      repeated string envs = 2;
     }
 
 
