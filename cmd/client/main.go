@@ -22,9 +22,10 @@ func main() {
 
 	cli := proto.NewGTClient(conn)
 
+	forwardHandler := &ssh.ForwardedTCPHandler{}
+
 	svr := &ssh.Server{
 		Addr: *svrAddr,
-
 		Handler: func(session ssh.Session) {
 			pty, winCh, isPty := session.Pty()
 
@@ -56,7 +57,21 @@ func main() {
 			}
 			session.Exit(0)
 		},
-
+		LocalPortForwardingCallback: func(ctx ssh.Context, destinationHost string, destinationPort uint32) bool {
+			log.Printf("local port forwarding: %s:%d", destinationHost, destinationPort)
+			return true
+		},
+		ReversePortForwardingCallback: func(ctx ssh.Context, bindHost string, bindPort uint32) bool {
+			log.Printf("reverse port forwarding: %s:%d", bindHost, bindPort)
+			return true
+		},
+		RequestHandlers: map[string]ssh.RequestHandler{
+			"tcpip-forward":        forwardHandler.HandleSSHRequest,
+			"cancel-tcpip-forward": forwardHandler.HandleSSHRequest,
+		},
+		ChannelHandlers: map[string]ssh.ChannelHandler{
+			"direct-tcpip": ssh.DirectTCPIPHandler,
+		},
 		SubsystemHandlers: map[string]ssh.SubsystemHandler{
 			"sftp": func(s ssh.Session) {
 				err := client.SFtp(cli, s)
