@@ -40,7 +40,7 @@ func postExecResponse(server proto.GT_GTServer, err error) error {
 	return server.Send(&proto.Response{Rsp: &proto.Response_ExecDone_{ExecDone: &proto.Response_ExecDone{}}})
 }
 
-func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) error {
+func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err error) {
 	if len(execReq.Commands) == 0 {
 		return postHeaderError(server, fmt.Errorf("no command to execute"))
 	}
@@ -51,6 +51,9 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) erro
 	cmds := append([]string{"bash", "-c"}, execReq.Commands...)
 
 	log.Printf("exec command: %s\n", strings.Join(cmds, " "))
+	defer func() {
+		log.Printf("exec command: %s done %v\n", strings.Join(cmds, " "), err)
+	}()
 
 	cmd := exec.Command(cmds[0], cmds[1:]...)
 	ds := newServerDataStream(server)

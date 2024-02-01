@@ -3,7 +3,6 @@ package client
 import (
 	"fmt"
 	"github.com/reyoung/gt/proto"
-	"log"
 )
 
 type clientDataStream struct {
@@ -43,7 +42,7 @@ func (c *clientDataStream) start() {
 				c.errChan <- fmt.Errorf("recv data frame failed: %w", err)
 				return
 			}
-			log.Printf("recv frame: %s", rsp.String())
+			//log.Printf("recv frame: %s", rsp.String())
 			if execDone := rsp.GetExecDone(); execDone != nil {
 				c.execDoneChan <- execDone
 				continue
