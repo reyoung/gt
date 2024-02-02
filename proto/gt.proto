@@ -60,6 +60,10 @@ message Response {
     uint32 exit_code = 2;
   }
 
+  message Accept {
+    string addr = 1;
+  }
+
   oneof rsp {
     Head head = 1;
     Data data = 2;
@@ -67,6 +71,44 @@ message Response {
   }
 }
 
+
+message DataWithSerial {
+  Data data = 1;
+  uint32 serial_id = 2;
+}
+
+message ListenRequest {
+  message Head {
+    string address = 1;
+  }
+
+  oneof req {
+    Head head = 1;
+    DataWithSerial payload = 2;
+  }
+}
+
+message ListenResponse {
+  message Head {
+    string error = 1;
+    uint32 port = 2;
+  }
+
+  message Accept {
+    string addr = 1;
+    uint32 port = 2;
+    uint32 serial_id = 3;
+  }
+
+  oneof rsp {
+    Head head = 1;
+    Accept accept = 2;
+    DataWithSerial payload = 3;
+  }
+}
+
+
 service GT {
   rpc GT(stream Request) returns (stream Response) {}
+  rpc Listen(stream ListenRequest) returns (stream ListenResponse) {}
 }

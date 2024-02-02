@@ -265,6 +265,237 @@ func (*Response_Data) isResponse_Rsp() {}
 
 func (*Response_ExecDone_) isResponse_Rsp() {}
 
+type DataWithSerial struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Data     *Data  `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	SerialId uint32 `protobuf:"varint,2,opt,name=serial_id,json=serialId,proto3" json:"serial_id,omitempty"`
+}
+
+func (x *DataWithSerial) Reset() {
+	*x = DataWithSerial{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DataWithSerial) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DataWithSerial) ProtoMessage() {}
+
+func (x *DataWithSerial) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DataWithSerial.ProtoReflect.Descriptor instead.
+func (*DataWithSerial) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DataWithSerial) GetData() *Data {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *DataWithSerial) GetSerialId() uint32 {
+	if x != nil {
+		return x.SerialId
+	}
+	return 0
+}
+
+type ListenRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Req:
+	//
+	//	*ListenRequest_Head_
+	//	*ListenRequest_Payload
+	Req isListenRequest_Req `protobuf_oneof:"req"`
+}
+
+func (x *ListenRequest) Reset() {
+	*x = ListenRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListenRequest) ProtoMessage() {}
+
+func (x *ListenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListenRequest.ProtoReflect.Descriptor instead.
+func (*ListenRequest) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{4}
+}
+
+func (m *ListenRequest) GetReq() isListenRequest_Req {
+	if m != nil {
+		return m.Req
+	}
+	return nil
+}
+
+func (x *ListenRequest) GetHead() *ListenRequest_Head {
+	if x, ok := x.GetReq().(*ListenRequest_Head_); ok {
+		return x.Head
+	}
+	return nil
+}
+
+func (x *ListenRequest) GetPayload() *DataWithSerial {
+	if x, ok := x.GetReq().(*ListenRequest_Payload); ok {
+		return x.Payload
+	}
+	return nil
+}
+
+type isListenRequest_Req interface {
+	isListenRequest_Req()
+}
+
+type ListenRequest_Head_ struct {
+	Head *ListenRequest_Head `protobuf:"bytes,1,opt,name=head,proto3,oneof"`
+}
+
+type ListenRequest_Payload struct {
+	Payload *DataWithSerial `protobuf:"bytes,2,opt,name=payload,proto3,oneof"`
+}
+
+func (*ListenRequest_Head_) isListenRequest_Req() {}
+
+func (*ListenRequest_Payload) isListenRequest_Req() {}
+
+type ListenResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to Rsp:
+	//
+	//	*ListenResponse_Head_
+	//	*ListenResponse_Accept_
+	//	*ListenResponse_Payload
+	Rsp isListenResponse_Rsp `protobuf_oneof:"rsp"`
+}
+
+func (x *ListenResponse) Reset() {
+	*x = ListenResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListenResponse) ProtoMessage() {}
+
+func (x *ListenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListenResponse.ProtoReflect.Descriptor instead.
+func (*ListenResponse) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{5}
+}
+
+func (m *ListenResponse) GetRsp() isListenResponse_Rsp {
+	if m != nil {
+		return m.Rsp
+	}
+	return nil
+}
+
+func (x *ListenResponse) GetHead() *ListenResponse_Head {
+	if x, ok := x.GetRsp().(*ListenResponse_Head_); ok {
+		return x.Head
+	}
+	return nil
+}
+
+func (x *ListenResponse) GetAccept() *ListenResponse_Accept {
+	if x, ok := x.GetRsp().(*ListenResponse_Accept_); ok {
+		return x.Accept
+	}
+	return nil
+}
+
+func (x *ListenResponse) GetPayload() *DataWithSerial {
+	if x, ok := x.GetRsp().(*ListenResponse_Payload); ok {
+		return x.Payload
+	}
+	return nil
+}
+
+type isListenResponse_Rsp interface {
+	isListenResponse_Rsp()
+}
+
+type ListenResponse_Head_ struct {
+	Head *ListenResponse_Head `protobuf:"bytes,1,opt,name=head,proto3,oneof"`
+}
+
+type ListenResponse_Accept_ struct {
+	Accept *ListenResponse_Accept `protobuf:"bytes,2,opt,name=accept,proto3,oneof"`
+}
+
+type ListenResponse_Payload struct {
+	Payload *DataWithSerial `protobuf:"bytes,3,opt,name=payload,proto3,oneof"`
+}
+
+func (*ListenResponse_Head_) isListenResponse_Rsp() {}
+
+func (*ListenResponse_Accept_) isListenResponse_Rsp() {}
+
+func (*ListenResponse_Payload) isListenResponse_Rsp() {}
+
 type Request_ResizeWindow struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -277,7 +508,7 @@ type Request_ResizeWindow struct {
 func (x *Request_ResizeWindow) Reset() {
 	*x = Request_ResizeWindow{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[3]
+		mi := &file_gt_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -290,7 +521,7 @@ func (x *Request_ResizeWindow) String() string {
 func (*Request_ResizeWindow) ProtoMessage() {}
 
 func (x *Request_ResizeWindow) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[3]
+	mi := &file_gt_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -337,7 +568,7 @@ type Request_Head struct {
 func (x *Request_Head) Reset() {
 	*x = Request_Head{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[4]
+		mi := &file_gt_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -350,7 +581,7 @@ func (x *Request_Head) String() string {
 func (*Request_Head) ProtoMessage() {}
 
 func (x *Request_Head) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[4]
+	mi := &file_gt_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -438,7 +669,7 @@ type Request_Head_Stfp struct {
 func (x *Request_Head_Stfp) Reset() {
 	*x = Request_Head_Stfp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[5]
+		mi := &file_gt_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -451,7 +682,7 @@ func (x *Request_Head_Stfp) String() string {
 func (*Request_Head_Stfp) ProtoMessage() {}
 
 func (x *Request_Head_Stfp) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[5]
+	mi := &file_gt_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -479,7 +710,7 @@ type Request_Head_Pty struct {
 func (x *Request_Head_Pty) Reset() {
 	*x = Request_Head_Pty{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[6]
+		mi := &file_gt_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -492,7 +723,7 @@ func (x *Request_Head_Pty) String() string {
 func (*Request_Head_Pty) ProtoMessage() {}
 
 func (x *Request_Head_Pty) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[6]
+	mi := &file_gt_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -534,7 +765,7 @@ type Request_Head_Exec struct {
 func (x *Request_Head_Exec) Reset() {
 	*x = Request_Head_Exec{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[7]
+		mi := &file_gt_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -547,7 +778,7 @@ func (x *Request_Head_Exec) String() string {
 func (*Request_Head_Exec) ProtoMessage() {}
 
 func (x *Request_Head_Exec) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[7]
+	mi := &file_gt_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -588,7 +819,7 @@ type Request_Head_Dial struct {
 func (x *Request_Head_Dial) Reset() {
 	*x = Request_Head_Dial{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[8]
+		mi := &file_gt_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -601,7 +832,7 @@ func (x *Request_Head_Dial) String() string {
 func (*Request_Head_Dial) ProtoMessage() {}
 
 func (x *Request_Head_Dial) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[8]
+	mi := &file_gt_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -638,7 +869,7 @@ type Response_Head struct {
 func (x *Response_Head) Reset() {
 	*x = Response_Head{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[9]
+		mi := &file_gt_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -651,7 +882,7 @@ func (x *Response_Head) String() string {
 func (*Response_Head) ProtoMessage() {}
 
 func (x *Response_Head) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[9]
+	mi := &file_gt_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -703,7 +934,7 @@ type Response_ExecDone struct {
 func (x *Response_ExecDone) Reset() {
 	*x = Response_ExecDone{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[10]
+		mi := &file_gt_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -716,7 +947,7 @@ func (x *Response_ExecDone) String() string {
 func (*Response_ExecDone) ProtoMessage() {}
 
 func (x *Response_ExecDone) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[10]
+	mi := &file_gt_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -746,6 +977,53 @@ func (x *Response_ExecDone) GetExitCode() uint32 {
 	return 0
 }
 
+type Response_Accept struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Addr string `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
+}
+
+func (x *Response_Accept) Reset() {
+	*x = Response_Accept{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Response_Accept) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Response_Accept) ProtoMessage() {}
+
+func (x *Response_Accept) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Response_Accept.ProtoReflect.Descriptor instead.
+func (*Response_Accept) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{2, 2}
+}
+
+func (x *Response_Accept) GetAddr() string {
+	if x != nil {
+		return x.Addr
+	}
+	return ""
+}
+
 type Response_Head_Error struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -757,7 +1035,7 @@ type Response_Head_Error struct {
 func (x *Response_Head_Error) Reset() {
 	*x = Response_Head_Error{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_gt_proto_msgTypes[11]
+		mi := &file_gt_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -770,7 +1048,7 @@ func (x *Response_Head_Error) String() string {
 func (*Response_Head_Error) ProtoMessage() {}
 
 func (x *Response_Head_Error) ProtoReflect() protoreflect.Message {
-	mi := &file_gt_proto_msgTypes[11]
+	mi := &file_gt_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -791,6 +1069,171 @@ func (x *Response_Head_Error) GetMessage() string {
 		return x.Message
 	}
 	return ""
+}
+
+type ListenRequest_Head struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+}
+
+func (x *ListenRequest_Head) Reset() {
+	*x = ListenRequest_Head{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListenRequest_Head) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListenRequest_Head) ProtoMessage() {}
+
+func (x *ListenRequest_Head) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListenRequest_Head.ProtoReflect.Descriptor instead.
+func (*ListenRequest_Head) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{4, 0}
+}
+
+func (x *ListenRequest_Head) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+type ListenResponse_Head struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Error string `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty"`
+	Port  uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+}
+
+func (x *ListenResponse_Head) Reset() {
+	*x = ListenResponse_Head{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListenResponse_Head) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListenResponse_Head) ProtoMessage() {}
+
+func (x *ListenResponse_Head) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListenResponse_Head.ProtoReflect.Descriptor instead.
+func (*ListenResponse_Head) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *ListenResponse_Head) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *ListenResponse_Head) GetPort() uint32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+type ListenResponse_Accept struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Addr     string `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
+	Port     uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	SerialId uint32 `protobuf:"varint,3,opt,name=serial_id,json=serialId,proto3" json:"serial_id,omitempty"`
+}
+
+func (x *ListenResponse_Accept) Reset() {
+	*x = ListenResponse_Accept{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_gt_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListenResponse_Accept) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListenResponse_Accept) ProtoMessage() {}
+
+func (x *ListenResponse_Accept) ProtoReflect() protoreflect.Message {
+	mi := &file_gt_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListenResponse_Accept.ProtoReflect.Descriptor instead.
+func (*ListenResponse_Accept) Descriptor() ([]byte, []int) {
+	return file_gt_proto_rawDescGZIP(), []int{5, 1}
+}
+
+func (x *ListenResponse_Accept) GetAddr() string {
+	if x != nil {
+		return x.Addr
+	}
+	return ""
+}
+
+func (x *ListenResponse_Accept) GetPort() uint32 {
+	if x != nil {
+		return x.Port
+	}
+	return 0
+}
+
+func (x *ListenResponse_Accept) GetSerialId() uint32 {
+	if x != nil {
+		return x.SerialId
+	}
+	return 0
 }
 
 var File_gt_proto protoreflect.FileDescriptor
@@ -838,7 +1281,7 @@ var file_gt_proto_rawDesc = []byte{
 	0x20, 0x03, 0x28, 0x09, 0x52, 0x04, 0x65, 0x6e, 0x76, 0x73, 0x1a, 0x1a, 0x0a, 0x04, 0x44, 0x69,
 	0x61, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x04, 0x61, 0x64, 0x64, 0x72, 0x42, 0x06, 0x0a, 0x04, 0x68, 0x65, 0x61, 0x64, 0x42, 0x05,
-	0x0a, 0x03, 0x72, 0x65, 0x71, 0x22, 0xbf, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x0a, 0x03, 0x72, 0x65, 0x71, 0x22, 0xdd, 0x02, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
 	0x73, 0x65, 0x12, 0x2a, 0x0a, 0x04, 0x68, 0x65, 0x61, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x2e, 0x48, 0x65, 0x61, 0x64, 0x48, 0x00, 0x52, 0x04, 0x68, 0x65, 0x61, 0x64, 0x12, 0x21,
@@ -858,13 +1301,53 @@ var file_gt_proto_rawDesc = []byte{
 	0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x72,
 	0x72, 0x6f, 0x72, 0x12, 0x1b, 0x0a, 0x09, 0x65, 0x78, 0x69, 0x74, 0x5f, 0x63, 0x6f, 0x64, 0x65,
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x65, 0x78, 0x69, 0x74, 0x43, 0x6f, 0x64, 0x65,
-	0x42, 0x05, 0x0a, 0x03, 0x72, 0x73, 0x70, 0x32, 0x31, 0x0a, 0x02, 0x47, 0x54, 0x12, 0x2b, 0x0a,
-	0x02, 0x47, 0x54, 0x12, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x1d, 0x5a, 0x1b, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x65, 0x79, 0x6f, 0x75, 0x6e, 0x67,
-	0x2f, 0x67, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x1a, 0x1c, 0x0a, 0x06, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x64,
+	0x64, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x61, 0x64, 0x64, 0x72, 0x42, 0x05,
+	0x0a, 0x03, 0x72, 0x73, 0x70, 0x22, 0x4e, 0x0a, 0x0e, 0x44, 0x61, 0x74, 0x61, 0x57, 0x69, 0x74,
+	0x68, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x12, 0x1f, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x44, 0x61,
+	0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x1b, 0x0a, 0x09, 0x73, 0x65, 0x72, 0x69,
+	0x61, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x73, 0x65, 0x72,
+	0x69, 0x61, 0x6c, 0x49, 0x64, 0x22, 0x9c, 0x01, 0x0a, 0x0d, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2f, 0x0a, 0x04, 0x68, 0x65, 0x61, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4c, 0x69,
+	0x73, 0x74, 0x65, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x48, 0x65, 0x61, 0x64,
+	0x48, 0x00, 0x52, 0x04, 0x68, 0x65, 0x61, 0x64, 0x12, 0x31, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c,
+	0x6f, 0x61, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x57, 0x69, 0x74, 0x68, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c,
+	0x48, 0x00, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x1a, 0x20, 0x0a, 0x04, 0x48,
+	0x65, 0x61, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x42, 0x05, 0x0a,
+	0x03, 0x72, 0x65, 0x71, 0x22, 0xb5, 0x02, 0x0a, 0x0e, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x30, 0x0a, 0x04, 0x68, 0x65, 0x61, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4c, 0x69,
+	0x73, 0x74, 0x65, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x48, 0x65, 0x61,
+	0x64, 0x48, 0x00, 0x52, 0x04, 0x68, 0x65, 0x61, 0x64, 0x12, 0x36, 0x0a, 0x06, 0x61, 0x63, 0x63,
+	0x65, 0x70, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x2e, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74, 0x48, 0x00, 0x52, 0x06, 0x61, 0x63, 0x63, 0x65, 0x70,
+	0x74, 0x12, 0x31, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x15, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x44, 0x61, 0x74, 0x61, 0x57,
+	0x69, 0x74, 0x68, 0x53, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x48, 0x00, 0x52, 0x07, 0x70, 0x61, 0x79,
+	0x6c, 0x6f, 0x61, 0x64, 0x1a, 0x30, 0x0a, 0x04, 0x48, 0x65, 0x61, 0x64, 0x12, 0x14, 0x0a, 0x05,
+	0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x72, 0x72,
+	0x6f, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x1a, 0x4d, 0x0a, 0x06, 0x41, 0x63, 0x63, 0x65, 0x70, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x61, 0x64, 0x64, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x61, 0x64, 0x64, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0d, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x73, 0x65, 0x72, 0x69,
+	0x61, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x73, 0x65, 0x72,
+	0x69, 0x61, 0x6c, 0x49, 0x64, 0x42, 0x05, 0x0a, 0x03, 0x72, 0x73, 0x70, 0x32, 0x6e, 0x0a, 0x02,
+	0x47, 0x54, 0x12, 0x2b, 0x0a, 0x02, 0x47, 0x54, 0x12, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x12,
+	0x3b, 0x0a, 0x06, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x12, 0x14, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x15, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x1d, 0x5a, 0x1b,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x65, 0x79, 0x6f, 0x75,
+	0x6e, 0x67, 0x2f, 0x67, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -879,41 +1362,56 @@ func file_gt_proto_rawDescGZIP() []byte {
 	return file_gt_proto_rawDescData
 }
 
-var file_gt_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_gt_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_gt_proto_goTypes = []interface{}{
-	(*Data)(nil),                 // 0: proto.Data
-	(*Request)(nil),              // 1: proto.Request
-	(*Response)(nil),             // 2: proto.Response
-	(*Request_ResizeWindow)(nil), // 3: proto.Request.ResizeWindow
-	(*Request_Head)(nil),         // 4: proto.Request.Head
-	(*Request_Head_Stfp)(nil),    // 5: proto.Request.Head.Stfp
-	(*Request_Head_Pty)(nil),     // 6: proto.Request.Head.Pty
-	(*Request_Head_Exec)(nil),    // 7: proto.Request.Head.Exec
-	(*Request_Head_Dial)(nil),    // 8: proto.Request.Head.Dial
-	(*Response_Head)(nil),        // 9: proto.Response.Head
-	(*Response_ExecDone)(nil),    // 10: proto.Response.ExecDone
-	(*Response_Head_Error)(nil),  // 11: proto.Response.Head.Error
+	(*Data)(nil),                  // 0: proto.Data
+	(*Request)(nil),               // 1: proto.Request
+	(*Response)(nil),              // 2: proto.Response
+	(*DataWithSerial)(nil),        // 3: proto.DataWithSerial
+	(*ListenRequest)(nil),         // 4: proto.ListenRequest
+	(*ListenResponse)(nil),        // 5: proto.ListenResponse
+	(*Request_ResizeWindow)(nil),  // 6: proto.Request.ResizeWindow
+	(*Request_Head)(nil),          // 7: proto.Request.Head
+	(*Request_Head_Stfp)(nil),     // 8: proto.Request.Head.Stfp
+	(*Request_Head_Pty)(nil),      // 9: proto.Request.Head.Pty
+	(*Request_Head_Exec)(nil),     // 10: proto.Request.Head.Exec
+	(*Request_Head_Dial)(nil),     // 11: proto.Request.Head.Dial
+	(*Response_Head)(nil),         // 12: proto.Response.Head
+	(*Response_ExecDone)(nil),     // 13: proto.Response.ExecDone
+	(*Response_Accept)(nil),       // 14: proto.Response.Accept
+	(*Response_Head_Error)(nil),   // 15: proto.Response.Head.Error
+	(*ListenRequest_Head)(nil),    // 16: proto.ListenRequest.Head
+	(*ListenResponse_Head)(nil),   // 17: proto.ListenResponse.Head
+	(*ListenResponse_Accept)(nil), // 18: proto.ListenResponse.Accept
 }
 var file_gt_proto_depIdxs = []int32{
-	4,  // 0: proto.Request.head:type_name -> proto.Request.Head
+	7,  // 0: proto.Request.head:type_name -> proto.Request.Head
 	0,  // 1: proto.Request.data:type_name -> proto.Data
-	3,  // 2: proto.Request.resize_window:type_name -> proto.Request.ResizeWindow
-	9,  // 3: proto.Response.head:type_name -> proto.Response.Head
+	6,  // 2: proto.Request.resize_window:type_name -> proto.Request.ResizeWindow
+	12, // 3: proto.Response.head:type_name -> proto.Response.Head
 	0,  // 4: proto.Response.data:type_name -> proto.Data
-	10, // 5: proto.Response.exec_done:type_name -> proto.Response.ExecDone
-	5,  // 6: proto.Request.Head.stfp:type_name -> proto.Request.Head.Stfp
-	6,  // 7: proto.Request.Head.pty:type_name -> proto.Request.Head.Pty
-	7,  // 8: proto.Request.Head.exec:type_name -> proto.Request.Head.Exec
-	8,  // 9: proto.Request.Head.dial:type_name -> proto.Request.Head.Dial
-	3,  // 10: proto.Request.Head.Pty.resize_window:type_name -> proto.Request.ResizeWindow
-	11, // 11: proto.Response.Head.error:type_name -> proto.Response.Head.Error
-	1,  // 12: proto.GT.GT:input_type -> proto.Request
-	2,  // 13: proto.GT.GT:output_type -> proto.Response
-	13, // [13:14] is the sub-list for method output_type
-	12, // [12:13] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	13, // 5: proto.Response.exec_done:type_name -> proto.Response.ExecDone
+	0,  // 6: proto.DataWithSerial.data:type_name -> proto.Data
+	16, // 7: proto.ListenRequest.head:type_name -> proto.ListenRequest.Head
+	3,  // 8: proto.ListenRequest.payload:type_name -> proto.DataWithSerial
+	17, // 9: proto.ListenResponse.head:type_name -> proto.ListenResponse.Head
+	18, // 10: proto.ListenResponse.accept:type_name -> proto.ListenResponse.Accept
+	3,  // 11: proto.ListenResponse.payload:type_name -> proto.DataWithSerial
+	8,  // 12: proto.Request.Head.stfp:type_name -> proto.Request.Head.Stfp
+	9,  // 13: proto.Request.Head.pty:type_name -> proto.Request.Head.Pty
+	10, // 14: proto.Request.Head.exec:type_name -> proto.Request.Head.Exec
+	11, // 15: proto.Request.Head.dial:type_name -> proto.Request.Head.Dial
+	6,  // 16: proto.Request.Head.Pty.resize_window:type_name -> proto.Request.ResizeWindow
+	15, // 17: proto.Response.Head.error:type_name -> proto.Response.Head.Error
+	1,  // 18: proto.GT.GT:input_type -> proto.Request
+	4,  // 19: proto.GT.Listen:input_type -> proto.ListenRequest
+	2,  // 20: proto.GT.GT:output_type -> proto.Response
+	5,  // 21: proto.GT.Listen:output_type -> proto.ListenResponse
+	20, // [20:22] is the sub-list for method output_type
+	18, // [18:20] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_gt_proto_init() }
@@ -959,7 +1457,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_ResizeWindow); i {
+			switch v := v.(*DataWithSerial); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -971,7 +1469,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_Head); i {
+			switch v := v.(*ListenRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -983,7 +1481,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_Head_Stfp); i {
+			switch v := v.(*ListenResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -995,7 +1493,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_Head_Pty); i {
+			switch v := v.(*Request_ResizeWindow); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1007,7 +1505,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_Head_Exec); i {
+			switch v := v.(*Request_Head); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1019,7 +1517,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Request_Head_Dial); i {
+			switch v := v.(*Request_Head_Stfp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1031,7 +1529,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Response_Head); i {
+			switch v := v.(*Request_Head_Pty); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1043,7 +1541,7 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Response_ExecDone); i {
+			switch v := v.(*Request_Head_Exec); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1055,7 +1553,91 @@ func file_gt_proto_init() {
 			}
 		}
 		file_gt_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Request_Head_Dial); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Response_Head); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Response_ExecDone); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Response_Accept); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Response_Head_Error); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListenRequest_Head); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListenResponse_Head); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_gt_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListenResponse_Accept); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1078,12 +1660,21 @@ func file_gt_proto_init() {
 		(*Response_ExecDone_)(nil),
 	}
 	file_gt_proto_msgTypes[4].OneofWrappers = []interface{}{
+		(*ListenRequest_Head_)(nil),
+		(*ListenRequest_Payload)(nil),
+	}
+	file_gt_proto_msgTypes[5].OneofWrappers = []interface{}{
+		(*ListenResponse_Head_)(nil),
+		(*ListenResponse_Accept_)(nil),
+		(*ListenResponse_Payload)(nil),
+	}
+	file_gt_proto_msgTypes[7].OneofWrappers = []interface{}{
 		(*Request_Head_Stfp_)(nil),
 		(*Request_Head_Pty_)(nil),
 		(*Request_Head_Exec_)(nil),
 		(*Request_Head_Dial_)(nil),
 	}
-	file_gt_proto_msgTypes[9].OneofWrappers = []interface{}{
+	file_gt_proto_msgTypes[12].OneofWrappers = []interface{}{
 		(*Response_Head_Error_)(nil),
 	}
 	type x struct{}
@@ -1092,7 +1683,7 @@ func file_gt_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_gt_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

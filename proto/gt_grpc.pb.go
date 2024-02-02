@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GTClient interface {
 	GT(ctx context.Context, opts ...grpc.CallOption) (GT_GTClient, error)
+	Listen(ctx context.Context, opts ...grpc.CallOption) (GT_ListenClient, error)
 }
 
 type gTClient struct {
@@ -64,11 +65,43 @@ func (x *gTGTClient) Recv() (*Response, error) {
 	return m, nil
 }
 
+func (c *gTClient) Listen(ctx context.Context, opts ...grpc.CallOption) (GT_ListenClient, error) {
+	stream, err := c.cc.NewStream(ctx, &GT_ServiceDesc.Streams[1], "/proto.GT/Listen", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &gTListenClient{stream}
+	return x, nil
+}
+
+type GT_ListenClient interface {
+	Send(*ListenRequest) error
+	Recv() (*ListenResponse, error)
+	grpc.ClientStream
+}
+
+type gTListenClient struct {
+	grpc.ClientStream
+}
+
+func (x *gTListenClient) Send(m *ListenRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *gTListenClient) Recv() (*ListenResponse, error) {
+	m := new(ListenResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GTServer is the server API for GT service.
 // All implementations must embed UnimplementedGTServer
 // for forward compatibility
 type GTServer interface {
 	GT(GT_GTServer) error
+	Listen(GT_ListenServer) error
 	mustEmbedUnimplementedGTServer()
 }
 
@@ -78,6 +111,9 @@ type UnimplementedGTServer struct {
 
 func (UnimplementedGTServer) GT(GT_GTServer) error {
 	return status.Errorf(codes.Unimplemented, "method GT not implemented")
+}
+func (UnimplementedGTServer) Listen(GT_ListenServer) error {
+	return status.Errorf(codes.Unimplemented, "method Listen not implemented")
 }
 func (UnimplementedGTServer) mustEmbedUnimplementedGTServer() {}
 
@@ -118,6 +154,32 @@ func (x *gTGTServer) Recv() (*Request, error) {
 	return m, nil
 }
 
+func _GT_Listen_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GTServer).Listen(&gTListenServer{stream})
+}
+
+type GT_ListenServer interface {
+	Send(*ListenResponse) error
+	Recv() (*ListenRequest, error)
+	grpc.ServerStream
+}
+
+type gTListenServer struct {
+	grpc.ServerStream
+}
+
+func (x *gTListenServer) Send(m *ListenResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *gTListenServer) Recv() (*ListenRequest, error) {
+	m := new(ListenRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GT_ServiceDesc is the grpc.ServiceDesc for GT service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -129,6 +191,12 @@ var GT_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GT",
 			Handler:       _GT_GT_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Listen",
+			Handler:       _GT_Listen_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
