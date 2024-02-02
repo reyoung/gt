@@ -92,6 +92,7 @@ func main() {
 			}
 			return client.DialTCP(cli)(ctx, address)
 		},
+		ReversePortListen: client.Listen(cli),
 	}
 	svr.ListenAndServe()
 }
