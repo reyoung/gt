@@ -65,7 +65,7 @@ func main() {
 		},
 		ReversePortForwardingCallback: func(ctx ssh.Context, bindHost string, bindPort uint32) bool {
 			log.Printf("reverse port forwarding: %s:%d", bindHost, bindPort)
-			return false
+			return true
 		},
 		ChannelHandlers: map[string]ssh.ChannelHandler{
 			"direct-tcpip": ssh.DirectTCPIPHandler,
