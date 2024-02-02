@@ -24,6 +24,8 @@ func main() {
 
 	cli := proto.NewGTClient(conn)
 
+	handler := &ssh.ForwardedTCPHandler{}
+
 	svr := &ssh.Server{
 		Addr: *svrAddr,
 		Handler: func(session ssh.Session) {
@@ -63,7 +65,7 @@ func main() {
 		},
 		ReversePortForwardingCallback: func(ctx ssh.Context, bindHost string, bindPort uint32) bool {
 			log.Printf("reverse port forwarding: %s:%d", bindHost, bindPort)
-			return true
+			return false
 		},
 		ChannelHandlers: map[string]ssh.ChannelHandler{
 			"direct-tcpip": ssh.DirectTCPIPHandler,
@@ -79,6 +81,10 @@ func main() {
 				}
 				s.Exit(0)
 			},
+		},
+		RequestHandlers: map[string]ssh.RequestHandler{
+			"tcpip-forward":        handler.HandleSSHRequest,
+			"cancel-tcpip-forward": handler.HandleSSHRequest,
 		},
 		LocalPortForwardingDialer: func(ctx context.Context, network, address string) (io.ReadWriteCloser, error) {
 			if network != "tcp" {
