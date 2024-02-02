@@ -3,7 +3,9 @@ package server
 import (
 	"fmt"
 	"github.com/reyoung/gt/proto"
+	"log"
 	"net"
+	"strings"
 )
 
 type Server struct {
@@ -49,6 +51,7 @@ func (s *Server) Listen(listenServer proto.GT_ListenServer) error {
 	if address == "" {
 		return fmt.Errorf("address should be not empty")
 	}
+	address = strings.Replace(address, "localhost", "0.0.0.0", 1)
 
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
@@ -58,6 +61,8 @@ func (s *Server) Listen(listenServer proto.GT_ListenServer) error {
 		return fmt.Errorf("listen failed: %w", err)
 	}
 	defer listener.Close()
+
+	log.Printf("listen at %s", listener.Addr())
 
 	err = listenServer.Send(&proto.ListenResponse{Rsp: &proto.ListenResponse_Head_{Head: &proto.ListenResponse_Head{
 		Port: uint32(listener.Addr().(*net.TCPAddr).Port),
@@ -79,6 +84,8 @@ func (s *Server) Listen(listenServer proto.GT_ListenServer) error {
 			}}})
 			return fmt.Errorf("accept failed: %w", err)
 		}
+
+		log.Printf("listener accepted %s", address)
 
 		serialID := cMap.Put(conn)
 		addr := conn.RemoteAddr().(*net.TCPAddr)

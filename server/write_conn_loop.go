@@ -32,6 +32,8 @@ func (w *writeConnLoop) Start(cMap *connMap, listenServer proto.GT_ListenServer)
 				return
 			}
 
+			log.Printf("server recv %s", req.String())
+
 			payload := req.GetPayload()
 			if payload == nil {
 				log.Printf("payload should be not nil")

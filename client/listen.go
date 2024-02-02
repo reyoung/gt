@@ -49,6 +49,8 @@ func (r *remoteListener) start() {
 				return
 			}
 
+			log.Printf("recv %v", recv.String())
+
 			if accept := recv.GetAccept(); accept != nil {
 				recvCh := make(chan *proto.Data, 4096)
 				accessResult := &acceptResult{
@@ -95,6 +97,10 @@ func (r *remoteRWC) bufSize() int {
 }
 
 func (r *remoteRWC) Read(p []byte) (n int, err error) {
+	log.Printf("read %d bytes, buf size %d\n", len(p), r.bufSize())
+	defer func() {
+		log.Printf("%d bytes read, err: %v, remaining %d \n", n, err, r.bufSize())
+	}()
 	if r.bufSize() == 0 {
 		data, ok := <-r.recvChan
 		if !ok {
@@ -112,9 +118,15 @@ func (r *remoteRWC) Read(p []byte) (n int, err error) {
 }
 
 func (r *remoteRWC) Write(p []byte) (n int, err error) {
+	log.Printf("write %d bytes, serial id %d buf size %d\n", len(p), r.Accept.SerialId, r.bufSize())
+	defer func() {
+		log.Printf("%d bytes written, err: %v, remaining %d, serial id %d \n", n, err, r.bufSize(), r.Accept.SerialId)
+	}()
+
 	n = len(p)
 	for len(p) > 2048 {
-		toSend := p[:2048]
+		toSend := make([]byte, 2048)
+		copy(toSend, p[:2048])
 		p = p[2048:]
 
 		r.sendChan <- &proto.DataWithSerial{
@@ -124,14 +136,18 @@ func (r *remoteRWC) Write(p []byte) (n int, err error) {
 			SerialId: r.Accept.SerialId,
 		}
 	}
+
 	if len(p) > 0 {
+		toSend := make([]byte, len(p))
+		copy(toSend, p)
 		r.sendChan <- &proto.DataWithSerial{
 			Data: &proto.Data{
-				Data: p,
+				Data: toSend,
 			},
+			SerialId: r.Accept.SerialId,
 		}
 	}
-	return 0, nil
+	return
 }
 
 func (r *remoteRWC) Close() error {
@@ -175,6 +191,8 @@ func Listen(client proto.GTClient) func(address string) (ssh.RemoteListener, err
 			return nil, fmt.Errorf("listen failed: %w", err)
 		}
 
+		log.Printf("listen on %s", address)
+
 		err = cli.Send(&proto.ListenRequest{Req: &proto.ListenRequest_Head_{Head: &proto.ListenRequest_Head{Address: address}}})
 		if err != nil {
 			return nil, fmt.Errorf("send head frame failed: %w", err)
@@ -192,7 +210,7 @@ func Listen(client proto.GTClient) func(address string) (ssh.RemoteListener, err
 		if head.Error != "" {
 			return nil, fmt.Errorf("listen failed: %s", head.Error)
 		}
-
+		log.Printf("listen on remote port %d, start listener", head.Port)
 		listener := &remoteListener{listenClient: cli, port: int(head.Port)}
 		listener.start()
 		return listener, nil
