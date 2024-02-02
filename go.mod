@@ -21,4 +21,4 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
 )
 
-replace github.com/gliderlabs/ssh v0.3.6 => github.com/reyoung/ssh v0.0.0-20240201132932-7233c6a371ae
+replace github.com/gliderlabs/ssh v0.3.6 => github.com/reyoung/ssh v0.0.0-20240202071616-d2498978eec2
