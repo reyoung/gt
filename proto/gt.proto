@@ -19,6 +19,7 @@ message Request {
     message Pty {
       string term = 1;
       ResizeWindow resize_window = 2;
+      string command = 3;
     }
     message Exec {
       string command = 1;

@@ -24,6 +24,7 @@ func Pty(client proto.GTClient, ptyReq ssh.Pty, winCh <-chan ssh.Window, s ssh.S
 				Rows: uint32(ptyReq.Window.Height),
 				Cols: uint32(ptyReq.Window.Width),
 			},
+			Command: s.RawCommand(),
 		}}},
 	}})
 	if err != nil {

@@ -11,7 +11,12 @@ import (
 )
 
 func ptyServer(ptyReq *proto.Request_Head_Pty, server proto.GT_GTServer) error {
-	c := exec.Command("/bin/bash")
+	args := []string{"-"}
+	if ptyReq.Command != "" {
+		args = []string{"-c", ptyReq.Command}
+	}
+
+	c := exec.Command("/bin/bash", args...)
 	f, err := pty.Start(c)
 	if err != nil {
 		server.Send(&proto.Response{Rsp: &proto.Response_Head_{Head: &proto.Response_Head{
