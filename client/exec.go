@@ -6,6 +6,7 @@ import (
 	"github.com/reyoung/gt/common"
 	"github.com/reyoung/gt/proto"
 	"io"
+	"log"
 )
 
 type ErrExecExit struct {
@@ -37,6 +38,7 @@ func Exec(cli proto.GTClient, session ssh.Session) error {
 			Command: session.RawCommand(),
 			Envs:    session.Environ(),
 		}}}}})
+
 	if err != nil {
 		return fmt.Errorf("send head frame failed: %w", err)
 	}
@@ -54,18 +56,20 @@ func Exec(cli proto.GTClient, session ssh.Session) error {
 
 	ds := newDataStream(gtCli)
 	rwc := common.DataStreamToReadWriteCloser(ds)
+
 	go func() {
 		_, _ = io.Copy(rwc, session)
-		rwc.Close()
+		_ = rwc.Close()
 	}()
-	go func() {
-		_, _ = io.Copy(session, rwc)
-	}()
+
+	written, _ := io.Copy(session, rwc)
+	log.Printf("exec done, written %d", written)
 
 	execDone, ok := <-ds.execDoneChan
 	if !ok {
 		return fmt.Errorf("exec done channel closed")
 	}
+
 	if execDone.Error == "" && execDone.ExitCode == 0 {
 		return nil
 	} else {

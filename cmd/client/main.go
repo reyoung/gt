@@ -30,11 +30,12 @@ func main() {
 		Addr: *svrAddr,
 		Handler: func(session ssh.Session) {
 			pty, winCh, isPty := session.Pty()
-
+			log.Printf("%s", session.RawCommand())
 			if !isPty {
-				log.Printf("no pty allocated, %s", session.RawCommand())
 				err := client.Exec(cli, session)
-				log.Printf("no pty allocated, exec done, %s %v", session.RawCommand(), err)
+				if err != nil {
+					log.Printf("no pty allocated, exec done, %s %v", session.RawCommand(), err)
+				}
 
 				if err != nil {
 					session.Write([]byte(err.Error()))

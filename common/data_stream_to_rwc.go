@@ -9,6 +9,7 @@ import (
 type dataStreamRWC struct {
 	stream     DataStream
 	readBuffer *bytes.Buffer
+	count      int
 }
 
 func (d *dataStreamRWC) bufSize() int {
@@ -29,6 +30,8 @@ func (d *dataStreamRWC) Read(p []byte) (n int, err error) {
 			return 0, io.EOF
 		}
 
+		d.count += len(data.Data)
+
 		d.readBuffer = bytes.NewBuffer(data.Data)
 	}
 
@@ -36,7 +39,7 @@ func (d *dataStreamRWC) Read(p []byte) (n int, err error) {
 }
 
 func (d *dataStreamRWC) Write(p []byte) (n int, err error) {
-	const maxChunkSize = 2048
+	const maxChunkSize = 2 * 1024 * 1024
 	nSend := 0
 	for len(p) > maxChunkSize {
 		err = d.stream.Send(&proto.Data{

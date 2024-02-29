@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 )
 
 func postHeaderError(server proto.GT_GTServer, err error) error {
@@ -60,7 +61,7 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err
 
 	cmd := exec.Command(cmds[0], cmds[1:]...)
 	cmd.Env = execReq.Envs
-	for _, envKey := range []string{"PATH", "HOME", "SHELL", "USER", "TZ", "DISPLAY"} {
+	for _, envKey := range []string{"PATH", "HOME", "SHELL", "USER", "TZ", "DISPLAY", "TMPDIR"} {
 		envVal, ok := os.LookupEnv(envKey)
 		if ok {
 			cmd.Env = append(cmd.Env, fmt.Sprintf("%s=%s", envKey, envVal))
@@ -70,22 +71,39 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err
 
 	ds := newServerDataStream(server)
 	rwc := common.DataStreamToReadWriteCloser(ds)
-	defer func() {
-		rwc.Close()
+
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return postExecResponse(server, fmt.Errorf("get stdout pipe failed: %w", err))
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		return postExecResponse(server, fmt.Errorf("get stderr pipe failed: %w", err))
+	}
+
+	var outClosed sync.WaitGroup
+	outClosed.Add(2)
+
+	go func() {
+		defer outClosed.Done()
+		defer stdoutPipe.Close()
+		_, _ = io.Copy(rwc, stdoutPipe)
 	}()
-	cmd.Stdout = rwc
-	cmd.Stderr = rwc
+
+	go func() {
+		defer outClosed.Done()
+		defer stderrPipe.Close()
+		_, _ = io.Copy(rwc, stderrPipe)
+	}()
+
 	stdinPipe, err := cmd.StdinPipe()
 	if err != nil {
 		return postExecResponse(server, fmt.Errorf("get stdin pipe failed: %w", err))
 	}
-	defer func() {
-		stdinPipe.Close()
-	}()
 	go func() {
 		_, _ = io.Copy(stdinPipe, rwc)
+		stdinPipe.Close()
 	}()
-	//cmd.Stdin = rwc
 
 	if err := cmd.Start(); err != nil {
 		return postExecResponse(server, fmt.Errorf("start command error: %w", err))
@@ -93,5 +111,7 @@ func execServer(execReq *proto.Request_Head_Exec, server proto.GT_GTServer) (err
 	if err := cmd.Wait(); err != nil {
 		return postExecResponse(server, fmt.Errorf("wait command error: %w", err))
 	}
+	outClosed.Wait()
+	rwc.Close()
 	return postExecResponse(server, nil)
 }
